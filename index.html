@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SCED 4005L Midterm Practice Quiz</title>
+<style>
+  :root {
+    --navy: #002654;
+    --navy-soft: #1d3d6b;
+    --gold: #FFC72C;
+    --gold-soft: #FFF4D1;
+    --paper: #FFFFFF;
+    --slate: #EEF2F8;
+    --line: #C9D2DE;
+    --ink: #1F2329;
+    --muted: #4A5563;
+    --right: #1E7A4C;
+    --right-bg: #E6F4EC;
+    --wrong: #B23A3A;
+    --wrong-bg: #FBEAEA;
+    --half: #8A5A00;
+    --half-bg: #FFF4D1;
+    --font: Calibri, Carlito, "Segoe UI", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: var(--font); color: var(--ink); background: var(--paper); font-size: 18px; line-height: 1.5; }
+  button, input, select { font-family: inherit; font-size: inherit; }
+  :focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+  header.top { background: var(--navy); color: #fff; padding: 22px 24px 20px; }
+  header.top .wrap { max-width: 1080px; margin: 0 auto; }
+  header.top h1 { margin: 0; font-size: 1.7rem; line-height: 1.2; }
+  header.top p { margin: 4px 0 0; color: var(--gold); font-size: 1.05rem; }
+
+  main { max-width: 1080px; margin: 0 auto; padding: 24px; }
+
+  .btn { border: 2px solid var(--navy); background: var(--navy); color: #fff; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 700; }
+  .btn:hover { background: var(--navy-soft); border-color: var(--navy-soft); }
+  .btn.ghost { background: #fff; color: var(--navy); }
+  .btn.ghost:hover { background: var(--slate); }
+  .btn.gold { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+  .btn.gold:hover { background: #ffd65e; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+  /* Start screen */
+  .intro { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: start; }
+  .intro h2 { font-size: 1.5rem; color: var(--navy); margin: 0 0 8px; }
+  .intro p { margin: 0 0 14px; max-width: 62ch; }
+  .note { background: var(--gold-soft); border-radius: 6px; padding: 12px 16px; margin: 16px 0 20px; }
+  table.mix { width: 100%; border-collapse: collapse; font-size: 1rem; }
+  table.mix caption { text-align: left; font-weight: 700; color: var(--navy); margin-bottom: 6px; font-size: 1.1rem; }
+  table.mix th, table.mix td { border-bottom: 1px solid var(--line); padding: 8px 6px; text-align: left; }
+  table.mix th { color: var(--navy); }
+  table.mix td.n { text-align: right; white-space: nowrap; }
+  table.mix tfoot td { font-weight: 700; border-bottom: none; }
+
+  /* Quiz layout */
+  .quiz { display: grid; grid-template-columns: 1fr 280px; gap: 28px; align-items: start; }
+  .qcard { border: 1px solid var(--line); border-radius: 8px; padding: 22px 24px; }
+  .qmeta { color: var(--muted); font-size: .95rem; margin-bottom: 6px; }
+  .qmeta strong { color: var(--navy); }
+  .qtext { font-size: 1.15rem; margin: 0 0 6px; color: var(--ink); font-weight: 400; }
+  .qhow { color: var(--muted); font-size: .95rem; margin: 0 0 14px; font-style: italic; }
+  fieldset { border: none; margin: 0; padding: 0; min-width: 0; }
+  legend { padding: 0; }
+  .opt { display: flex; gap: 12px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; margin-bottom: 8px; cursor: pointer; background: #fff; }
+  .opt:hover { background: var(--slate); }
+  .opt input { margin-top: 5px; width: 18px; height: 18px; flex: none; accent-color: var(--navy); }
+  .opt.is-right { border-color: var(--right); background: var(--right-bg); }
+  .opt.is-wrong { border-color: var(--wrong); background: var(--wrong-bg); }
+  .match-row { display: grid; grid-template-columns: 1fr 1.2fr; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .match-row select { width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+  .match-row.is-right select { border-color: var(--right); background: var(--right-bg); }
+  .match-row.is-wrong select { border-color: var(--wrong); background: var(--wrong-bg); }
+  ol.order { list-style: none; padding: 0; margin: 0; counter-reset: ord; }
+  ol.order li { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; margin-bottom: 8px; counter-increment: ord; }
+  ol.order li::before { content: counter(ord); font-weight: 700; color: var(--navy); width: 1.4em; flex: none; }
+  ol.order li span { flex: 1; }
+  ol.order li.is-right { border-color: var(--right); background: var(--right-bg); }
+  ol.order li.is-wrong { border-color: var(--wrong); background: var(--wrong-bg); }
+  .mv { border: 1px solid var(--line); background: #fff; border-radius: 4px; padding: 2px 8px; cursor: pointer; color: var(--navy); }
+  .mv:disabled { opacity: .35; cursor: not-allowed; }
+
+  .feedback { margin-top: 16px; border-radius: 6px; padding: 14px 16px; display: none; }
+  .feedback.show { display: block; }
+  .feedback.right { background: var(--right-bg); border-left: 0; }
+  .feedback.wrong { background: var(--wrong-bg); }
+  .feedback.half { background: var(--half-bg); }
+  .feedback h3 { margin: 0 0 4px; font-size: 1.1rem; }
+  .feedback.right h3 { color: var(--right); }
+  .feedback.wrong h3 { color: var(--wrong); }
+  .feedback.half h3 { color: var(--half); }
+  .feedback p { margin: 4px 0 0; }
+  .actions { display: flex; gap: 12px; justify-content: space-between; margin-top: 18px; flex-wrap: wrap; }
+
+  /* Seating chart progress */
+  .room { border: 1px solid var(--line); border-radius: 8px; padding: 16px; position: sticky; top: 16px; }
+  .room h2 { font-size: 1.05rem; margin: 0 0 4px; color: var(--navy); }
+  .room .score { font-size: .95rem; color: var(--muted); margin: 0 0 12px; }
+  .board { background: var(--navy); color: #fff; text-align: center; font-size: .85rem; border-radius: 4px; padding: 4px; margin-bottom: 12px; }
+  .desks { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .desk { aspect-ratio: 1.25; border: 2px solid var(--line); border-radius: 4px 4px 10px 10px; background: #fff; color: var(--navy); font-weight: 700; font-size: .9rem; cursor: pointer; padding: 0; }
+  .desk:hover { background: var(--slate); }
+  .desk.current { border-color: var(--navy); box-shadow: 0 0 0 2px var(--gold); }
+  .desk.r { background: var(--right); border-color: var(--right); color: #fff; }
+  .desk.w { background: var(--wrong); border-color: var(--wrong); color: #fff; }
+  .desk.h { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+  .legend { list-style: none; padding: 0; margin: 12px 0 0; font-size: .85rem; color: var(--muted); display: grid; gap: 4px; }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+
+  /* Results */
+  .results h2 { color: var(--navy); font-size: 1.6rem; margin: 0; }
+  .bigscore { font-size: 3.4rem; font-weight: 700; color: var(--navy); line-height: 1; margin: 12px 0 4px; }
+  .bigscore small { font-size: 1.3rem; color: var(--muted); font-weight: 400; }
+  .cats { margin: 24px 0; display: grid; gap: 12px; max-width: 720px; }
+  .cat-row { display: grid; grid-template-columns: 260px 1fr 70px; gap: 12px; align-items: center; }
+  .bar { height: 14px; background: var(--slate); border-radius: 7px; overflow: hidden; }
+  .bar span { display: block; height: 100%; background: var(--navy); }
+  .review { margin-top: 28px; }
+  .review h3 { color: var(--navy); }
+  .miss { border: 1px solid var(--line); border-radius: 8px; padding: 14px 18px; margin-bottom: 12px; max-width: 820px; }
+  .miss .qmeta { margin-bottom: 4px; }
+  .miss p { margin: 4px 0; }
+  .miss .ans { color: var(--right); font-weight: 700; }
+
+  footer { max-width: 1080px; margin: 0 auto; padding: 8px 24px 32px; color: var(--muted); font-size: .9rem; }
+
+  @media (max-width: 860px) {
+    .intro, .quiz { grid-template-columns: 1fr; }
+    .room { position: static; }
+    .cat-row { grid-template-columns: 1fr 60px; }
+    .cat-row .bar { grid-column: 1 / -1; grid-row: 2; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .feedback.show { animation: rise .25s ease-out; }
+    @keyframes rise { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <h1>SCED 4005L Midterm Practice Quiz</h1>
+    <p>Classroom Management Lab, Fall 2026</p>
+  </div>
+</header>
+
+<main id="app" tabindex="-1"></main>
+
+<div id="live" class="sr-only" aria-live="polite"></div>
+
+<footer>Practice only. Your score here is not recorded or sent to D2L.</footer>
+
+<script>
+/* ============================================================
+   QUESTION BANK
+   cat: F = Foundations, E = Obligations & Ethics,
+        R = Rules & Procedures, T = Theorists, I = Internship Weeks
+   types: mc, tf, multi, match, order
+   ============================================================ */
+const CATS = {
+  F: { name: "Foundations: The Teacher's Role", draw: 4 },
+  E: { name: "Obligations, Ethics & Your Discipline System", draw: 4 },
+  R: { name: "Rules & Procedures", draw: 4 },
+  T: { name: "Classroom Management Theorists", draw: 11 },
+  I: { name: "Internship Weeks", draw: 2 }
+};
+
+const BANK = [
+  // ---------- FOUNDATIONS ----------
+  { cat: "F", type: "mc",
+    q: "Mr. Hale spends the first two weeks of school teaching routines, arranging desks so he can see every student, and planning lessons that keep students busy and engaged. Which view of classroom management does his approach best reflect?",
+    options: ["Classroom management is mostly preventive. Good teachers set up conditions that stop problems before they start.",
+              "Classroom management means reacting quickly with strong consequences.",
+              "Classroom management is mainly the administration's job, not the teacher's.",
+              "Classroom management only matters once misbehavior begins."],
+    answer: 0,
+    explain: "Effective management is largely preventive. Routines, room setup, and engaging instruction prevent many problems before any consequence is needed." },
+  { cat: "F", type: "mc",
+    q: "Mr. Brooks is moving from teaching 5th grade to teaching 9th grade. Which change in student behavior should he be ready for?",
+    options: ["Older students are more likely to question rules and want to know the reasons behind them.",
+              "Older students no longer need taught procedures.",
+              "Older students respond best to sticker charts and small prizes.",
+              "Older students' behavior improves on its own, so management is less important."],
+    answer: 0,
+    explain: "Adolescents want more independence and often test limits and question rules. Explaining the reasons behind expectations helps, but procedures still need to be taught." },
+  { cat: "F", type: "mc",
+    q: "Ms. Ortiz notices that her 11th graders care a great deal about how they look in front of their friends. A student makes a rude comment during a lesson. Which response best fits what we know about secondary students?",
+    options: ["Speak with the student quietly and privately so he doesn't have to save face in front of peers.",
+              "Correct him loudly in front of the class so everyone learns the lesson.",
+              "Ignore every rude comment for the rest of the year.",
+              "Send him to the office for any comment, no matter how small."],
+    answer: 0,
+    explain: "Peer opinion matters a lot to adolescents. Public correction can turn a small problem into a power struggle, while a private word lets the student change course without losing face." },
+  { cat: "F", type: "multi",
+    q: "Ms. Patel is rearranging her classroom before the new semester. Which choices support effective classroom arrangement? Select all that apply.",
+    options: ["Keeping clear traffic paths to the door, pencil sharpener, and supply area",
+              "Placing her desk and teaching spots so she can see every student",
+              "Keeping frequently used materials easy for students to reach",
+              "Putting her desk so her back is to the class while she grades",
+              "Placing a group table right in the busy path next to the door"],
+    answer: [0, 1, 2],
+    explain: "Good arrangements keep traffic moving, let the teacher see every student, and make materials easy to get. Turning your back to the class or crowding a busy path invites problems." },
+  { cat: "F", type: "tf",
+    q: "True or false: Effective classroom management is mostly about having strong consequences ready for misbehavior.",
+    options: ["True", "False"], answer: 1,
+    explain: "False. Consequences are part of a plan, but most effective management comes from prevention: relationships, routines, room setup, and engaging instruction." },
+  { cat: "F", type: "mc",
+    q: "While teaching, Ms. Greene walks over and stands near a group that is drifting off task. She never stops the lesson, and the group gets back to work. What about her room setup made this possible?",
+    options: ["Her room arrangement lets her move easily to any part of the room.",
+              "Her desks are bolted in rows that face the board.",
+              "She keeps her desk at the front so she never has to move.",
+              "She keeps all materials in a locked cabinet."],
+    answer: 0,
+    explain: "An arrangement with open paths lets the teacher use proximity. Simply moving closer often redirects students without interrupting the lesson." },
+  { cat: "F", type: "match",
+    q: "Match each part of the teacher's role to the example that shows it.",
+    pairs: [["Planning engaging instruction", "Designs lessons with clear goals and active tasks"],
+            ["Building a positive climate", "Greets students at the door by name"],
+            ["Preventing problems", "Teaches the procedure for entering the room on day one"],
+            ["Responding to misbehavior", "Calmly redirects a student who is off task"]],
+    explain: "The teacher's role includes planning, building climate, preventing problems, and responding when problems happen. Most of the work happens before misbehavior ever starts." },
+  { cat: "F", type: "mc",
+    q: "A first-year teacher says, \"I'll focus on my content first and worry about classroom management if problems come up.\" What is the best response?",
+    options: ["Management and instruction work together, so both need to be planned from the first day.",
+              "That's a good plan, because strong content prevents all behavior problems.",
+              "That's a good plan, because management can't be planned ahead of time.",
+              "Management only matters in middle school, so it depends on the grade level."],
+    answer: 0,
+    explain: "Instruction and management can't be separated. Without routines and expectations set from day one, even great lessons can fall apart." },
+
+  // ---------- OBLIGATIONS & ETHICS ----------
+  { cat: "E", type: "mc",
+    q: "An intern posts a photo of a student's graded essay, with the student's name visible, on her personal Instagram to show how proud she is. Which GaPSC Code of Ethics standard is she most likely violating?",
+    options: ["Confidentiality", "Public Funds and Property", "Testing", "Remunerative Conduct"],
+    answer: 0,
+    explain: "Sharing identifiable student work or records without permission is a confidentiality issue (Standard 7). Pride is not a reason to share student information publicly." },
+  { cat: "E", type: "mc",
+    q: "During his internship, Jordan is told by a student that an adult at home has been hitting her. She asks him not to tell anyone. What should Jordan do?",
+    options: ["Report it right away through the school's required reporting process, and don't promise to keep it secret.",
+              "Promise to keep the secret so the student keeps trusting him.",
+              "Question the student and her family to find out if it is really true before reporting.",
+              "Wait to see if more signs of abuse appear before saying anything."],
+    answer: 0,
+    explain: "Educators are mandated reporters. Suspected abuse must be reported promptly through the proper channels. You don't investigate yourself, and you never promise to keep it secret." },
+  { cat: "E", type: "mc",
+    q: "A teacher offers paid private tutoring to students in her own current classes without approval from her school district. Which GaPSC standard does this most directly involve?",
+    options: ["Remunerative Conduct", "Confidentiality", "Testing", "Alcohol or Drugs"],
+    answer: 0,
+    explain: "Remunerative Conduct (Standard 6) covers using your position for personal pay, including tutoring your own students for money without local approval." },
+  { cat: "E", type: "mc",
+    q: "Before a state assessment, a teacher shows students several of the actual test items so they can practice them. Which GaPSC standard is being violated?",
+    options: ["Testing", "Honesty", "Public Funds and Property", "Required Reports"],
+    answer: 0,
+    explain: "Standard 10 (Testing) covers the security and integrity of assessments. Sharing actual test items before the test is a testing violation." },
+  { cat: "E", type: "multi",
+    q: "Ms. Lee is writing the discipline system for her classroom management plan. Which items belong in it? Select all that apply.",
+    options: ["Clear classroom rules",
+              "Consequences that are applied consistently",
+              "Procedures for daily routines",
+              "A plan for sharing expectations with students and parents",
+              "A private list of students she expects to cause trouble"],
+    answer: [0, 1, 2, 3],
+    explain: "A discipline system includes rules, consistent consequences, procedures, and communication with students and families. Labeling students ahead of time is unfair and creates negative expectations." },
+  { cat: "E", type: "mc",
+    q: "A teacher regularly sends private messages to a student through her personal social media account about topics unrelated to school. Which GaPSC standard is most at risk?",
+    options: ["Conduct with Students", "Remunerative Conduct", "Testing", "Public Funds and Property"],
+    answer: 0,
+    explain: "Conduct with Students (Standard 2) requires professional relationships. Private, personal messaging with a student can cross that line." },
+  { cat: "E", type: "mc",
+    q: "A teacher uses the school copier and paper to print flyers for her weekend business. Which GaPSC standard does this involve?",
+    options: ["Public Funds and Property", "Confidentiality", "Conduct with Students", "Testing"],
+    answer: 0,
+    explain: "Standard 5 (Public Funds and Property) covers misusing school resources for personal gain." },
+  { cat: "E", type: "mc",
+    q: "A teacher changes several attendance records so his class looks better on a school report. Which GaPSC standard is he violating?",
+    options: ["Honesty", "Testing", "Confidentiality", "Remunerative Conduct"],
+    answer: 0,
+    explain: "Falsifying records is a violation of Standard 4 (Honesty)." },
+  { cat: "E", type: "mc",
+    q: "A teacher leaves her class alone for ten minutes to make copies, and a student is injured during that time. Which legal obligation is most at issue?",
+    options: ["The duty to supervise students", "The duty to keep grades confidential", "The duty to report test scores", "The duty to post classroom rules"],
+    answer: 0,
+    explain: "Teachers have a legal duty to supervise students. Leaving a class unattended can make a teacher liable if a student is hurt." },
+
+  // ---------- RULES & PROCEDURES ----------
+  { cat: "R", type: "mc",
+    q: "Which of these is a procedure rather than a rule?",
+    options: ["When you finish your test, place it face down in the tray and read silently.",
+              "Respect other people's property.",
+              "Be on time to class.",
+              "Keep your hands and feet to yourself."],
+    answer: 0,
+    explain: "A procedure explains how something is done. Rules set expectations for behavior and come with consequences." },
+  { cat: "R", type: "mc",
+    q: "On the first day, Ms. Kim explained how to turn in homework. Three weeks later, students still toss papers on her desk. Based on Wong's approach, what is missing?",
+    options: ["She needs to rehearse the procedure with students and reinforce it until it becomes a routine.",
+              "She needs a stronger consequence for tossing papers.",
+              "She should stop collecting homework altogether.",
+              "She should let students decide how to turn in work."],
+    answer: 0,
+    explain: "Wong says procedures must be taught, rehearsed, and reinforced. Explaining a procedure once isn't enough to make it a routine." },
+  { cat: "R", type: "order",
+    q: "Put the steps for teaching a procedure (Wong) in the correct order.",
+    items: ["Explain and model the procedure",
+            "Students practice the procedure while the teacher watches",
+            "The teacher gives feedback and reteaches as needed",
+            "Students do the procedure automatically as a routine"],
+    explain: "Teach it, rehearse it, then reinforce it until it becomes routine." },
+  { cat: "R", type: "tf",
+    q: "True or false: According to Wong, rules have consequences when they are broken, but procedures are practiced and retaught rather than punished.",
+    options: ["True", "False"], answer: 0,
+    explain: "True. When students don't follow a procedure, you reteach and rehearse it. Rules are tied to consequences." },
+  { cat: "R", type: "mc",
+    q: "A student returns after a two-day absence and asks, \"Did I miss anything?\" Which practice handles this best?",
+    options: ["A posted absent-work procedure, such as a folder or D2L page with handouts and due dates, that students check on their own",
+              "Stopping the lesson to explain everything the student missed",
+              "Telling the student to ask a friend",
+              "Not allowing make-up work so students come to school"],
+    answer: 0,
+    explain: "A clear absent-work procedure lets students catch up independently without interrupting instruction." },
+  { cat: "R", type: "multi",
+    q: "Which describe effective classroom rules? Select all that apply.",
+    options: ["Few in number, usually about three to five",
+              "Stated in positive terms",
+              "Describe behavior that can be observed",
+              "A long list that covers every possible misbehavior",
+              "Written vaguely so the teacher can interpret them later"],
+    answer: [0, 1, 2],
+    explain: "Good rules are few, positive, and observable. Long or vague lists are hard to remember and hard to enforce fairly." },
+  { cat: "R", type: "match",
+    q: "Match each classroom routine to the area of management it belongs to.",
+    pairs: [["Collecting homework from each row", "Managing student work"],
+            ["Making up a quiz after being absent", "Absences and make-up work"],
+            ["Updating grades in D2L each week", "Grades and feedback"],
+            ["Starting the bell-ringer when class begins", "Beginning of class"]],
+    explain: "Each area of the school day needs its own clear procedure so students know what to do without asking." },
+  { cat: "R", type: "mc",
+    q: "Mr. Diaz accepts late work on some days and refuses it on others, depending on how he feels. What is the main problem?",
+    options: ["Inconsistency makes the policy feel unfair and unpredictable to students.",
+              "He should never accept late work.",
+              "He should always accept late work.",
+              "Late work policies don't matter in secondary classrooms."],
+    answer: 0,
+    explain: "Whatever the policy, students need it to be consistent. Inconsistency leads to arguments and feelings of unfairness." },
+
+  // ---------- THEORISTS ----------
+  { cat: "T", type: "mc",
+    q: "In a 10th grade class, one student acts as the class clown while others laugh and egg him on. Which theorists stressed that students act differently in groups and take on roles like the clown or instigator?",
+    options: ["Redl and Wattenberg", "B. F. Skinner", "Ronald Morrish", "Lee and Marlene Canter"],
+    answer: 0,
+    explain: "Redl and Wattenberg focused on group dynamics and the roles students take on within a group." },
+  { cat: "T", type: "mc",
+    q: "A student starts drifting off task. Without stopping the lesson, the teacher moves closer and makes eye contact. Using Redl and Wattenberg's influence techniques, what is this?",
+    options: ["Supporting self-control", "Situational assistance", "Appraising reality", "Invoking pleasure and pain"],
+    answer: 0,
+    explain: "Supporting self-control uses low-key moves like eye contact and proximity to help students manage their own behavior." },
+  { cat: "T", type: "mc",
+    q: "A frustrated student stops working. The teacher breaks the task into smaller steps and moves her away from a noisy area. Under Redl and Wattenberg's influence techniques, what is this?",
+    options: ["Situational assistance", "Supporting self-control", "Appraising reality", "Invoking pleasure and pain"],
+    answer: 0,
+    explain: "Situational assistance means changing the situation, such as helping with the task or removing a distraction, so the student can succeed." },
+  { cat: "T", type: "mc",
+    q: "Ms. Ruiz praises a student for staying on task for five minutes, then for ten, and then for fifteen, gradually expecting more. Which Skinner idea is she using?",
+    options: ["Shaping behavior through successive approximations", "Withitness", "Congruent communication", "Training for compliance"],
+    answer: 0,
+    explain: "Skinner's shaping reinforces small steps toward the goal behavior." },
+  { cat: "T", type: "tf",
+    q: "True or false: According to Skinner, behavior that is reinforced is more likely to be repeated.",
+    options: ["True", "False"], answer: 0,
+    explain: "True. This is the core idea of Skinner's operant conditioning." },
+  { cat: "T", type: "mc",
+    q: "A student keeps calling out in class, and every time he does, the teacher stops and responds to him. How would Skinner explain why the behavior continues?",
+    options: ["The teacher's attention is reinforcing the calling out.",
+              "The student has a mistaken goal of revenge.",
+              "The teacher lacks withitness.",
+              "The class rules aren't posted."],
+    answer: 0,
+    explain: "In Skinner's view, any consequence that keeps a behavior going is reinforcing it, and teacher attention is a powerful reinforcer." },
+  { cat: "T", type: "multi",
+    q: "While working with a small reading group, Mr. Owens notices two students in the back passing notes. Without leaving the group, he catches their eye and signals them to get back to work. Which Kounin concepts is he showing? Select all that apply.",
+    options: ["Withitness", "Overlapping", "Ripple effect", "Satiation"],
+    answer: [0, 1],
+    explain: "Withitness is knowing what's happening everywhere in the room. Overlapping is handling two things at once, like redirecting students while keeping the group going." },
+  { cat: "T", type: "mc",
+    q: "A teacher firmly corrects one student for talking. Nearby students quickly stop their own side conversations. Which Kounin concept describes this?",
+    options: ["Ripple effect", "Momentum", "Satiation", "Group alerting"],
+    answer: 0,
+    explain: "Kounin's ripple effect is when correcting one student also changes the behavior of others who see it." },
+  { cat: "T", type: "mc",
+    q: "In the middle of a lesson, a teacher suddenly jumps back to an earlier topic, then forgets where she was. Students lose track and start talking. Which Kounin concept is missing?",
+    options: ["Smoothness", "Ripple effect", "Overlapping", "Withitness"],
+    answer: 0,
+    explain: "Kounin's smoothness means moving through a lesson without jerky interruptions or abrupt jumps between topics." },
+  { cat: "T", type: "mc",
+    q: "A teacher asks a question, pauses, and then calls on a student at random so everyone stays ready to answer. Which Kounin concept is this?",
+    options: ["Group alerting", "Satiation", "Ripple effect", "Situational assistance"],
+    answer: 0,
+    explain: "Group alerting keeps the whole class attentive and involved, not just the student who is called on." },
+  { cat: "T", type: "mc",
+    q: "Paint spills on the art room floor. Which teacher response reflects Haim Ginott's congruent communication?",
+    options: ["\"Paint is on the floor. We need paper towels and a sponge.\"",
+              "\"You are so careless. You never watch what you're doing.\"",
+              "\"Why can't you ever be more like your sister?\"",
+              "\"That's it. No more art for you this week.\""],
+    answer: 0,
+    explain: "Ginott's sane messages address the situation, not the student's character. Labels and sarcasm damage the relationship." },
+  { cat: "T", type: "match",
+    q: "Match each theorist to the key idea most connected to them.",
+    pairs: [["Redl and Wattenberg", "Group dynamics and the roles students play"],
+            ["B. F. Skinner", "Reinforcement shapes behavior"],
+            ["Jacob Kounin", "Withitness and smooth lesson management"],
+            ["Haim Ginott", "Congruent communication that addresses the situation"],
+            ["Lee and Marlene Canter", "Assertive discipline and the teacher's right to teach"]],
+    explain: "Each theorist built on earlier ideas, moving from understanding groups to shaping behavior, managing lessons, communicating well, and taking charge assertively." },
+  { cat: "T", type: "mc",
+    q: "A teacher says, \"Um, could you guys maybe try to be a little quieter, please?\" Nothing changes. Using the Canters' response styles, how would you describe her?",
+    options: ["Nonassertive", "Assertive", "Hostile", "Congruent"],
+    answer: 0,
+    explain: "The Canters describe nonassertive teachers as passive and unclear. Students don't believe they will follow through." },
+  { cat: "T", type: "mc",
+    q: "According to the Canters, what are the three parts of a classroom discipline plan?",
+    options: ["Rules, positive recognition, and corrective actions",
+              "Rules, rewards, and detention",
+              "Procedures, homework, and grades",
+              "Compliance, skills, and choices"],
+    answer: 0,
+    explain: "The Canters' plan includes rules, positive recognition for following them, and corrective actions (consequences) when they are broken." },
+  { cat: "T", type: "tf",
+    q: "True or false: The Canters believed teachers have the right to teach and students have the right to learn in a calm, orderly classroom.",
+    options: ["True", "False"], answer: 0,
+    explain: "True. Protecting those rights is the foundation of Assertive Discipline." },
+  { cat: "T", type: "mc",
+    q: "Ms. Ford says, \"I set clear rules, praise students who follow them, apply consequences consistently, and send my plan home to parents.\" Whose approach does this sound most like?",
+    options: ["Lee and Marlene Canter", "Redl and Wattenberg", "Jacob Kounin", "Haim Ginott"],
+    answer: 0,
+    explain: "Clear rules, positive recognition, consistent consequences, and sharing the plan with parents are the core of Assertive Discipline." },
+  { cat: "T", type: "order",
+    q: "Put Ronald Morrish's three phases of Real Discipline in order.",
+    items: ["Training for compliance", "Teaching students how to behave", "Managing student choices"],
+    explain: "Morrish starts by insisting on compliance, then teaches the skills students need, and finally gives students more choices as they show responsibility." },
+  { cat: "T", type: "mc",
+    q: "A student shoves his chair in hard and runs out the door. Ms. Lane calls him back: \"Come back, push your chair in properly, and walk out.\" Which Morrish practice is she using?",
+    options: ["Having the student do it over the right way",
+              "Ignoring the behavior to avoid a power struggle",
+              "Letting the student choose his own consequence",
+              "Giving the student a reward for leaving quietly next time"],
+    answer: 0,
+    explain: "Morrish insists on compliance. When students do something wrong, they practice it again the right way." },
+  { cat: "T", type: "mc",
+    q: "According to Morrish, when should students be given more choices in the classroom?",
+    options: ["Gradually, as they show they can handle the responsibility",
+              "On the first day, so they feel ownership",
+              "Never, since teachers make every decision",
+              "Only after they vote on the class rules"],
+    answer: 0,
+    explain: "In Morrish's third phase, choices are earned and expanded as students show they can behave responsibly." },
+  { cat: "T", type: "tf",
+    q: "True or false: Morrish believes teachers should begin the year by insisting on compliance rather than having students create the class rules.",
+    options: ["True", "False"], answer: 0,
+    explain: "True. Morrish argues that adults set the limits and teach expectations first, and that choice comes later." },
+  { cat: "T", type: "mc",
+    q: "Which statement best matches Morrish's view of discipline?",
+    options: ["Discipline is taught by adults. Teachers must set limits and teach students how to behave.",
+              "Good behavior develops naturally if students are given freedom.",
+              "Discipline is mostly about reinforcing any behavior you want to see.",
+              "Discipline should be handled by the office, not the teacher."],
+    answer: 0,
+    explain: "Morrish's Real Discipline holds that students learn appropriate behavior because adults teach it and insist on it." },
+
+  // ---------- INTERNSHIP WEEKS ----------
+  { cat: "I", type: "mc",
+    q: "During an Internship Week, what are the deadlines for the discussion?",
+    options: ["Post your response by Friday night and reply to two classmates by Sunday.",
+              "Post your response by Sunday and reply to one classmate by Monday.",
+              "Post your response by Wednesday and reply to three classmates by Friday.",
+              "There are no deadlines during Internship Weeks."],
+    answer: 0,
+    explain: "Visit the discussion early in the week, post by Friday night, and reply to two classmates by Sunday." },
+  { cat: "I", type: "tf",
+    q: "True or false: Even though the Internship Week activity is about your field placement, the grade is recorded in SCED 4005L.",
+    options: ["True", "False"], answer: 0,
+    explain: "True. Internship Week discussions are graded in the SCED 4005L D2L course." },
+  { cat: "I", type: "mc",
+    q: "While observing, an intern sees the teacher make a sarcastic comment about a student's answer in front of the whole class. On the observation worksheet, where does this belong?",
+    options: ["Practices to avoid", "Best practices", "Gold nuggets", "It should not be recorded."],
+    answer: 0,
+    explain: "Sarcasm damages relationships and classroom climate. It belongs under practices to avoid." },
+  { cat: "I", type: "multi",
+    q: "During Internship Week, an intern lists things in her placement classroom. Which are within the teacher's control? Select all that apply.",
+    options: ["How the teacher responds when a student is disrespectful",
+              "How the room is arranged",
+              "The procedures for moving between activities",
+              "A student's situation at home",
+              "The date of the school's fire drill"],
+    answer: [0, 1, 2],
+    explain: "Teachers control their own responses, room setup, and procedures. Students' home lives and school-wide schedules are outside a teacher's control." },
+  { cat: "I", type: "mc",
+    q: "On the classroom observation worksheet, what is a \"gold nugget\"?",
+    options: ["A specific idea from your observation that you want to use in your own future classroom",
+              "A practice that went poorly and should be avoided",
+              "A grade the mentor teacher gives you",
+              "A rule posted in the classroom"],
+    answer: 0,
+    explain: "Gold nuggets are the valuable ideas you want to take with you into your own teaching." }
+];
+
+/* ============================================================
+   QUIZ ENGINE
+   ============================================================ */
+const app = document.getElementById("app");
+const live = document.getElementById("live");
+let set = [];      // drawn questions with their per-attempt state
+let idx = 0;
+
+const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const announce = (t) => { live.textContent = ""; setTimeout(() => { live.textContent = t; }, 50); };
+
+function buildSet() {
+  const out = [];
+  Object.keys(CATS).forEach(c => {
+    const pool = shuffle(BANK.filter(b => b.cat === c));
+    pool.slice(0, CATS[c].draw).forEach(q => out.push(prepare(q)));
+  });
+  // keep categories mixed but not grouped
+  return shuffle(out);
+}
+
+function prepare(q) {
+  const item = { q, checked: false, points: 0, response: null };
+  if (q.type === "mc" || q.type === "multi") {
+    item.order = shuffle(q.options.map((_, i) => i));
+  } else if (q.type === "tf") {
+    item.order = [0, 1];
+  } else if (q.type === "match") {
+    item.rightOrder = shuffle(q.pairs.map((_, i) => i));
+    item.response = q.pairs.map(() => "");
+  } else if (q.type === "order") {
+    let o = shuffle(q.items.map((_, i) => i));
+    while (o.every((v, i) => v === i) && o.length > 1) o = shuffle(o);
+    item.response = o;
+  }
+  return item;
+}
+
+/* ---------- Start screen ---------- */
+function renderStart() {
+  const rows = Object.keys(CATS).map(c => `<tr><td>${esc(CATS[c].name)}</td><td class="n">${CATS[c].draw}</td><td class="n">${CATS[c].draw * 2}</td></tr>`).join("");
+  app.innerHTML = `
+    <section class="intro" aria-labelledby="introHead">
+      <div>
+        <h2 id="introHead">Get ready for the midterm</h2>
+        <p>This practice quiz has 25 questions drawn from the same five categories as the midterm. The questions are similar to the midterm, but they are not the same questions.</p>
+        <p>After each question, select <strong>Check answer</strong> to see if you were right and why. You'll get a new mix of questions every time you start.</p>
+        <div class="note">Matching, ordering, and select-all questions give partial credit, just like the midterm. A mostly correct answer earns 1 of 2 points.</div>
+        <button class="btn gold" id="startBtn">Start practice quiz</button>
+      </div>
+      <table class="mix">
+        <caption>What's on the quiz</caption>
+        <thead><tr><th scope="col">Category</th><th scope="col" class="n">Questions</th><th scope="col" class="n">Points</th></tr></thead>
+        <tbody>${rows}</tbody>
+        <tfoot><tr><td>Total</td><td class="n">25</td><td class="n">50</td></tr></tfoot>
+      </table>
+    </section>`;
+  document.getElementById("startBtn").addEventListener("click", start);
+}
+
+function start() {
+  set = buildSet();
+  idx = 0;
+  renderQuestion();
+}
+
+/* ---------- Question screen ---------- */
+function howTo(type) {
+  return { mc: "Choose one answer.", tf: "Choose true or false.", multi: "Select all that apply.",
+           match: "Choose a match for each item.", order: "Use the Move up and Move down buttons to put the items in order." }[type];
+}
+
+function renderQuestion() {
+  const item = set[idx];
+  const q = item.q;
+  const name = `q${idx}`;
+  let body = "";
+
+  if (q.type === "mc" || q.type === "tf" || q.type === "multi") {
+    const input = q.type === "multi" ? "checkbox" : "radio";
+    body = item.order.map((oi, k) => {
+      const checked = item.response && (Array.isArray(item.response) ? item.response.includes(oi) : item.response === oi);
+      return `<label class="opt" data-oi="${oi}">
+          <input type="${input}" name="${name}" value="${oi}" ${checked ? "checked" : ""} ${item.checked ? "disabled" : ""}>
+          <span>${esc(q.options[oi])}</span></label>`;
+    }).join("");
+  } else if (q.type === "match") {
+    body = q.pairs.map((p, i) => {
+      const opts = item.rightOrder.map(ri => `<option value="${ri}" ${String(item.response[i]) === String(ri) ? "selected" : ""}>${esc(q.pairs[ri][1])}</option>`).join("");
+      return `<div class="match-row" data-i="${i}">
+          <label for="${name}_${i}">${esc(p[0])}</label>
+          <select id="${name}_${i}" ${item.checked ? "disabled" : ""}><option value="">Choose a match</option>${opts}</select>
+        </div>`;
+    }).join("");
+  } else if (q.type === "order") {
+    body = `<ol class="order" id="orderList">${item.response.map((ii, pos) => `
+        <li data-ii="${ii}"><span>${esc(q.items[ii])}</span>
+          <button class="mv" data-dir="-1" data-pos="${pos}" ${pos === 0 || item.checked ? "disabled" : ""} aria-label="Move up: ${esc(q.items[ii])}">Move up</button>
+          <button class="mv" data-dir="1" data-pos="${pos}" ${pos === item.response.length - 1 || item.checked ? "disabled" : ""} aria-label="Move down: ${esc(q.items[ii])}">Move down</button>
+        </li>`).join("")}</ol>`;
+  }
+
+  const last = idx === set.length - 1;
+  app.innerHTML = `
+    <div class="quiz">
+      <section class="qcard" aria-labelledby="qHead">
+        <div class="qmeta"><strong>Question ${idx + 1} of ${set.length}</strong>, ${esc(CATS[q.cat].name)}</div>
+        <fieldset>
+          <legend><h2 class="qtext" id="qHead" tabindex="-1">${esc(q.q)}</h2></legend>
+          <p class="qhow">${howTo(q.type)}</p>
+          ${body}
+        </fieldset>
+        <div class="feedback" id="fb"></div>
+        <div class="actions">
+          <button class="btn ghost" id="prevBtn" ${idx === 0 ? "disabled" : ""}>Previous</button>
+          <span>
+            <button class="btn" id="checkBtn" ${item.checked ? "hidden" : ""}>Check answer</button>
+            <button class="btn gold" id="nextBtn" ${item.checked ? "" : "hidden"}>${last ? "See my results" : "Next question"}</button>
+          </span>
+        </div>
+      </section>
+      ${roomHTML()}
+    </div>`;
+
+  wireInputs(item);
+  document.getElementById("prevBtn").addEventListener("click", () => { idx--; renderQuestion(); });
+  document.getElementById("checkBtn").addEventListener("click", () => check(item));
+  document.getElementById("nextBtn").addEventListener("click", () => {
+    if (last) return renderResults();
+    idx++; renderQuestion();
+  });
+  document.querySelectorAll(".desk").forEach(d => d.addEventListener("click", () => { idx = +d.dataset.i; renderQuestion(); }));
+  if (item.checked) showFeedback(item);
+  document.getElementById("qHead").focus();
+}
+
+function wireInputs(item) {
+  const q = item.q;
+  if (q.type === "mc" || q.type === "tf") {
+    app.querySelectorAll(`input[name="q${idx}"]`).forEach(inp => inp.addEventListener("change", () => { item.response = +inp.value; }));
+  } else if (q.type === "multi") {
+    app.querySelectorAll(`input[name="q${idx}"]`).forEach(inp => inp.addEventListener("change", () => {
+      item.response = [...app.querySelectorAll(`input[name="q${idx}"]:checked`)].map(i => +i.value);
+    }));
+  } else if (q.type === "match") {
+    app.querySelectorAll(".match-row select").forEach((sel, i) => sel.addEventListener("change", () => { item.response[i] = sel.value; }));
+  } else if (q.type === "order") {
+    app.querySelectorAll(".mv").forEach(b => b.addEventListener("click", () => {
+      const pos = +b.dataset.pos, dir = +b.dataset.dir, r = item.response;
+      [r[pos], r[pos + dir]] = [r[pos + dir], r[pos]];
+      const movedText = q.items[r[pos + dir]];
+      renderQuestion();
+      announce(`${movedText} moved to position ${pos + dir + 1}.`);
+      const target = app.querySelector(`.mv[data-pos="${pos + dir}"][data-dir="${dir}"]`) || app.querySelector(`.mv[data-pos="${pos + dir}"]`);
+      if (target && !target.disabled) target.focus();
+    }));
+  }
+}
+
+function hasAnswer(item) {
+  const r = item.response, t = item.q.type;
+  if (t === "mc" || t === "tf") return typeof r === "number";
+  if (t === "multi") return Array.isArray(r) && r.length > 0;
+  if (t === "match") return r.every(v => v !== "");
+  return true;
+}
+
+function score(item) {
+  const q = item.q, r = item.response;
+  let frac = 0;
+  if (q.type === "mc" || q.type === "tf") frac = r === q.answer ? 1 : 0;
+  else if (q.type === "multi") {
+    let ok = 0;
+    q.options.forEach((_, i) => { if (q.answer.includes(i) === r.includes(i)) ok++; });
+    frac = ok / q.options.length;
+  } else if (q.type === "match") {
+    frac = r.filter((v, i) => +v === i).length / q.pairs.length;
+  } else if (q.type === "order") {
+    frac = r.filter((v, i) => v === i).length / q.items.length;
+  }
+  if (frac === 1) return 2;
+  if (q.type === "multi" && frac >= 0.75) return 1;
+  if ((q.type === "match" || q.type === "order") && frac >= 0.5) return 1;
+  return 0;
+}
+
+function check(item) {
+  if (!hasAnswer(item)) {
+    const fb = document.getElementById("fb");
+    fb.className = "feedback show half";
+    announce("Answer the question first.");
+    fb.innerHTML = `<h3>Answer the question first</h3><p>${item.q.type === "match" ? "Choose a match for every item, then check your answer." : "Make a selection, then check your answer."}</p>`;
+    return;
+  }
+  item.checked = true;
+  item.points = score(item);
+  renderQuestion();
+  const msg = item.points === 2 ? "Correct" : item.points === 1 ? "Partly correct" : "Not quite";
+  announce(`${msg}. ${item.points} of 2 points.`);
+}
+
+function correctText(q) {
+  if (q.type === "mc" || q.type === "tf") return q.options[q.answer];
+  if (q.type === "multi") return q.answer.map(i => q.options[i]).join("; ");
+  if (q.type === "match") return q.pairs.map(p => `${p[0]}: ${p[1]}`).join("; ");
+  if (q.type === "order") return q.items.map((t, i) => `${i + 1}. ${t}`).join("  ");
+}
+
+function showFeedback(item) {
+  const q = item.q, fb = document.getElementById("fb");
+  const cls = item.points === 2 ? "right" : item.points === 1 ? "half" : "wrong";
+  const head = item.points === 2 ? "Correct, 2 of 2 points" : item.points === 1 ? "Partly correct, 1 of 2 points" : "Not quite, 0 of 2 points";
+  fb.className = `feedback show ${cls}`;
+  fb.innerHTML = `<h3>${head}</h3>
+    ${item.points < 2 ? `<p><strong>Correct answer:</strong> ${esc(correctText(q))}</p>` : ""}
+    <p>${esc(q.explain)}</p>`;
+
+  // mark options
+  if (q.type === "mc" || q.type === "tf" || q.type === "multi") {
+    const right = Array.isArray(q.answer) ? q.answer : [q.answer];
+    app.querySelectorAll(".opt").forEach(l => {
+      const oi = +l.dataset.oi;
+      const chosen = l.querySelector("input").checked;
+      if (right.includes(oi)) l.classList.add("is-right");
+      else if (chosen) l.classList.add("is-wrong");
+    });
+  } else if (q.type === "match") {
+    app.querySelectorAll(".match-row").forEach((row, i) => row.classList.add(+item.response[i] === i ? "is-right" : "is-wrong"));
+  } else if (q.type === "order") {
+    app.querySelectorAll("#orderList li").forEach((li, pos) => li.classList.add(+li.dataset.ii === pos ? "is-right" : "is-wrong"));
+  }
+}
+
+function roomHTML() {
+  const pts = set.reduce((a, s) => a + (s.checked ? s.points : 0), 0);
+  const done = set.filter(s => s.checked).length;
+  const desks = set.map((s, i) => {
+    const st = !s.checked ? "" : s.points === 2 ? "r" : s.points === 1 ? "h" : "w";
+    const label = `Question ${i + 1}${!s.checked ? ", not checked yet" : s.points === 2 ? ", correct" : s.points === 1 ? ", partly correct" : ", incorrect"}`;
+    return `<button class="desk ${st} ${i === idx ? "current" : ""}" data-i="${i}" aria-label="${label}" ${i === idx ? 'aria-current="true"' : ""}>${i + 1}</button>`;
+  }).join("");
+  return `<aside class="room" aria-labelledby="roomHead">
+      <h2 id="roomHead">Your progress</h2>
+      <p class="score">${done} of ${set.length} checked, ${pts} points so far</p>
+      <div class="board" aria-hidden="true">Front of the room</div>
+      <div class="desks">${desks}</div>
+      <ul class="legend">
+        <li><i style="background:var(--right)"></i>Correct</li>
+        <li><i style="background:var(--gold)"></i>Partly correct</li>
+        <li><i style="background:var(--wrong)"></i>Incorrect</li>
+        <li><i style="background:#fff;border:2px solid var(--line)"></i>Not checked yet</li>
+      </ul>
+      ${done === set.length ? '<button class="btn gold" id="finishBtn" style="margin-top:14px;width:100%">See my results</button>' : ""}
+    </aside>`;
+}
+
+document.addEventListener("click", (e) => { if (e.target && e.target.id === "finishBtn") renderResults(); });
+
+/* ---------- Results ---------- */
+function renderResults() {
+  const unchecked = set.filter(s => !s.checked).length;
+  const total = set.reduce((a, s) => a + s.points, 0);
+  const pct = Math.round(total / 50 * 100);
+  const cats = Object.keys(CATS).map(c => {
+    const qs = set.filter(s => s.q.cat === c);
+    const got = qs.reduce((a, s) => a + s.points, 0), max = qs.length * 2;
+    return `<div class="cat-row">
+        <span>${esc(CATS[c].name)}</span>
+        <div class="bar" role="img" aria-label="${got} of ${max} points"><span style="width:${max ? got / max * 100 : 0}%"></span></div>
+        <span class="n">${got} / ${max}</span>
+      </div>`;
+  }).join("");
+  const missed = set.map((s, i) => ({ s, i })).filter(x => x.s.checked && x.s.points < 2);
+  const missHTML = missed.length ? missed.map(({ s, i }) => `
+      <div class="miss">
+        <div class="qmeta"><strong>Question ${i + 1}</strong>, ${esc(CATS[s.q.cat].name)}, ${s.points} of 2 points</div>
+        <p>${esc(s.q.q)}</p>
+        <p class="ans">Correct answer: ${esc(correctText(s.q))}</p>
+        <p>${esc(s.q.explain)}</p>
+      </div>`).join("") : "<p>You didn't miss any questions. Nice work.</p>";
+
+  app.innerHTML = `
+    <section class="results" aria-labelledby="resHead">
+      <h2 id="resHead" tabindex="-1">Your results</h2>
+      <div class="bigscore">${total} <small>of 50 points (${pct}%)</small></div>
+      ${unchecked ? `<p>You skipped ${unchecked} question${unchecked > 1 ? "s" : ""}. Skipped questions count as 0 points.</p>` : ""}
+      <h3 style="color:var(--navy);margin-top:24px">Score by category</h3>
+      <div class="cats">${cats}</div>
+      <p>Spend extra study time on the categories with the shortest bars. The midterm content map lists the chapter and SoftChalk lesson for each one.</p>
+      <div class="actions" style="justify-content:flex-start">
+        <button class="btn gold" id="newBtn">Start a new practice quiz</button>
+        <button class="btn ghost" id="retryBtn">Retake these same questions</button>
+      </div>
+      <div class="review">
+        <h3>Review the questions you missed</h3>
+        ${missHTML}
+      </div>
+    </section>`;
+  document.getElementById("newBtn").addEventListener("click", start);
+  document.getElementById("retryBtn").addEventListener("click", () => { set = set.map(s => prepare(s.q)); idx = 0; renderQuestion(); });
+  document.getElementById("resHead").focus();
+  announce(`Your score is ${total} of 50 points.`);
+}
+
+renderStart();
+</script>
+</body>
+</html>
